@@ -14,7 +14,7 @@ Este repositório reúne os projetos que desenvolvi durante meus estudos no Boot
 >
 
 
-[Criando um Sistema Bancário com Python](projetos_python_DIO /sistema_bancario.py)
+[Criando um Sistema Bancário com Python](https://github.com/Danilo-Palacio/projetos_python_DIO/blob/a21c4483932dc39c015fe70d10239355b1a77112/sistema_bancario.py)
 
 ---
 
