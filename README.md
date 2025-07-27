@@ -20,8 +20,8 @@ Este repositório reúne os projetos que desenvolvi durante meus estudos no Boot
 
 🛠 Em Desenvolvimento
 
-- [ ] Nome do próximo projeto
-- [ ] Outro projeto em andamento
+- [ ] Trabalhando com Coleções em Python
+- [ ] Otimizando o Sistema Bancário com Funções Python (Gestão e Controle de Transações Bancárias)
 
 ---
 
