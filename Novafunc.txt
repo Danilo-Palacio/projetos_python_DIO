@@ -1,0 +1,18 @@
+
+- Estabelecer um limite de 10 transações diarias para uma conta (
+
+        deposito
+        saque
+
+) - OK
+
+- Se o usuário tentar fazer uma transação após atingir o limite, 
+informar que excedeu o numero para aquele dia - OK
+
+print("\n Você excedeu o número de transações permitidas para hoje!")
+
+- Mostre no extrato, a data e hora de todas as transações
+data
+depósito
+Valor
+OK
