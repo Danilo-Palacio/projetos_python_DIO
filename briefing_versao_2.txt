@@ -5,6 +5,12 @@ Além disso, para a versão 2 do nosso sistema precisamos criar duas novas funç
 - Criar usuário (cliente do banco)
 - Criar conta corrente ( vincular com o usuário).
 
+___________________________________________________________________________________________
+
+Parte 1
+
+
+
 
 Separação em funções
 Devemos  criar funções para todas as operações do sistema.
@@ -12,21 +18,29 @@ Cada função terá uma regra na passagem de argumentos.
 
 O retorno e a forma como serão chamas, pode ser definida como achar melhor.
 
-
-Função saque:
-A função saque deve RECEBER os argumentos apenas por nome (Keyword only).
-Sugestão de argumentos: saldo, valor, extrato, limite, numero_saques, limite_saques.
-Sugestão de retorno: Saldo e extrato.
-
-Depósito:
+Depósito: - OK
 A função depósito deve receber os argumentos apenas por posição (positional only).
 Sugestão de argumentos: Saldo, valor, extrato.
 Sugestão de retorno: Saldo e extrato.
 
-Extrato:
+Função saque: - OK
+A função saque deve RECEBER os argumentos apenas por nome (Keyword only).
+Sugestão de argumentos: saldo, valor, extrato, limite, numero_saques, limite_saques.
+Sugestão de retorno: Saldo e extrato.
+
+Extrato: - OK
 A função extrato deve receber os argumentos por posição e nome (positional only e Keyword only).
 Argumentos posicionais: Saldo
 Argumentos nomeados: Extrato.
+
+
+___________________________________________________________________________________________
+
+Parte 2
+
+
+
+
 
 Novas funções:
 Precisamos criar duas novas funções: Criar usuario e criar conta corrente.
