@@ -38,26 +38,23 @@ ________________________________________________________________________________
 
 Parte 2
 
-
-
-
-
 Novas funções:
 Precisamos criar duas novas funções: Criar usuario e criar conta corrente.
 Fique a vontade para adicionar mais funções, exemplo: listar contas.
 
-Criar usuário (cliente)
+Criar usuário (cliente) - OK
 O programa deve armazenar os usuários em uma lista, um usuário é por:
-nomedata de nascimento
-CPF (somente os números, e não pode ser cadastrado mais de um usuario com o mesmo CPF)
-endereço (endereço é uma string com o formato: logradouro, nro - bairro - cidade/sigla estado.)
+- Nome
+- Data de nascimento
+- CPF (somente os números, e *não pode ser cadastrado mais de um usuario com o mesmo CPF*)
+- Endereço (endereço é uma string com o formato: logradouro, nro - bairro - cidade/sigla estado.)
 
 
-Criar conta corrente
+Criar conta corrente - OK
 O programa deve armazenar contas em uma lista, uma conta é composta por:
-Agência (valor FIXO "0001")
-Numero da conta ( sequencial, iniciando em 1)
-usuario ( o Usuario pode ter mais de uma conta, mas uma conta só pertence a um usuário.)
+- Agência (valor FIXO "0001")
+- Numero da conta ( sequencial, iniciando em 1)
+- Usuario (o Usuario pode ter mais de uma conta, mas uma conta só pertence a um usuário.)
 
 Dica
 Para vincular um usuário a uma conta, filtra a lista de usuários buscando o número do CPF informado para cada usuário da lista.
