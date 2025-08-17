@@ -17,6 +17,17 @@ Para listar todos digite - [1]
 Para buscar um usuario digite - [2]
 '''
 
+def login(cookie):
+
+    print("\nOlá Bem vindo ao sistema bancario!")
+    login_cliente = str(input("Favor, digite seu cpf para inicio: "))
+    usuario_login = pesquisa_cpf(login_cliente)
+    conta_login = pesquisa_conta(login_cliente)
+
+    cookie_login[0] = login_cliente
+
+    return usuario_login, conta_login, login_cliente
+
 def teste_excessao_no_dia(agora):
     amanha = (agora + timedelta(days=1)).replace(hour=0,minute=0,second=0,microsecond=0)
     diferenca = amanha - agora
@@ -215,15 +226,6 @@ def texto_padrao_usuario(conta):
     
     return texto_padrao
 
-dados = {
-    "saldo" : 0,
-    "limite" : 500,
-    "extrato" : {},
-    "numero_saques" : 0,
-    "numero_depositos" : 0,
-    "numero_transacao" : 0,
-}
-
 usuarios = { 1:{
         "Nome":"Danilo",
         "Data de Nascimento": "29/09/1995",
@@ -254,20 +256,18 @@ LIMITE_TRANSACAO = 10
 
 tentativas_login = 0
 
-
+cookie_login = [0]
 
 while True:
-    print("\nOlá Bem vindo ao sistema bancario!")
-    login_cliente = str(input("Favor, digite seu cpf para inicio: "))
-    usuario_login = pesquisa_cpf(login_cliente)
-
-    conta_login = pesquisa_conta(login_cliente)
+    if cookie_login[0] == 0:
+        usuario_login, conta_login, login_cliente = login(cookie_login)
 
     if usuario_login == 1:
 
-        print("\n================== Bem vindo =================="),
+        print("\n================== Bem vindo ==================\n"),
         usuario_logado = usuarios[usuario_login]
         print(f"Nome: {usuario_logado["Nome"]} \nCPF: {usuario_logado["CPF"]}\n")
+        
         contas_pesquisa = pesquisa_conta(login_cliente)
 
         contagem = 0
@@ -282,15 +282,20 @@ while True:
         print(menu_usuario_logado)
 
         opcao_escolhida = input("\nEscolha a opção desejada =>").upper()
-
+    
         if opcao_escolhida == "Q": 
             print("Sistema fechado.")
+            cookie_login[0] = 0
             break
 
         elif opcao_escolhida == "N":
 
-            print("Criar Conta Corrente")
-            cpf_para_pesquisa = input("Favor digite o CPF do titular da nova conta: ")
+            print("\n============= Criar Conta Corrente ============\n")
+
+            if cookie_login[0] != 0:
+                cpf_para_pesquisa = cookie_login[0]
+            else:
+                cpf_para_pesquisa = input("Favor digite o CPF do titular da nova conta: ")
 
             if pesquisa_cpf(cpf_para_pesquisa) == "Não Localizado" :
 
@@ -303,9 +308,9 @@ while True:
                 
             else:
                 contas_pesquisa = pesquisa_conta(cpf_para_pesquisa)
-                print("\n")
+                print("\n Contas já criadas: ")
                 for conta in contas_pesquisa:
-                    print(f"Conta Corrente: {conta}")
+                    print(f"    Conta Corrente: {conta}")
 
                 print("\nDeseja criar uma nova conta?")
 
@@ -313,15 +318,13 @@ while True:
 
                 if criar_nova_conta == "S":
                     funcao_criar_conta(cpf_para_pesquisa)
+                    print("\n Voltando ao menu anterior\n")
                     continue
                 else: continue
 
         elif opcao_escolhida.isdigit() == True:
             if int(opcao_escolhida) <= int(contagem):
 
-                print("Teste de conta")
-                print(f"Opção escolhida: {opcao_escolhida}")
-                print(f"os dados da conta são: {contas[int(opcao_escolhida)]}")
                 conta_escolhida = contas[int(opcao_escolhida)]
 
                 agora = datetime.now()
@@ -363,7 +366,6 @@ while True:
                 else:
                     print("Operação inválida, por favor selecione novamente a operação desejada.")
 
-
             else:
                 print("Opção inválida")
                 continue
@@ -371,10 +373,6 @@ while True:
         else:
             print("Opção inválida, iniciando o sistema novamente")
             continue
-        
-
-        
-        
 
     elif tentativas_login <= 2:
          tentativas_login += 1
