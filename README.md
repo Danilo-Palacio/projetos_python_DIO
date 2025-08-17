@@ -144,7 +144,7 @@ contas = {
 
 ## 👨‍💻 Autor
 
-Projeto desenvolvido por **Danilo Palacio** no Bootcamp **DIO & Suzano -
+Projeto desenvolvido por **Danilo Palácio** no Bootcamp **DIO & Suzano -
 Python Developer**.\
 📧 \[[LinkedIn](https://www.linkedin.com/in/danilocpalacio/)]
 
