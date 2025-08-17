@@ -84,19 +84,19 @@ empresas:
 1.  Clone este repositório:
 
     ``` bash
-    git clone https://github.com/seu-usuario/sistema-bancario.git
+    git clone https://github.com/Danilo-Palacio/sistema_bancario.git
     ```
 
 2.  Entre na pasta do projeto:
 
     ``` bash
-    cd sistema-bancario
+    cd sistema_bancario
     ```
 
 3.  Execute o script em Python:
 
     ``` bash
-    python sistema.py
+    main.py
     ```
 
 ------------------------------------------------------------------------
@@ -109,14 +109,14 @@ empresas:
 usuarios = {
     1:{
         "Nome":"Danilo",
-        "Data de Nascimento": "29/09/1995",
+        "Data de Nascimento": "01/01/1995",
         "CPF": 441,
-        "Endereço Formatado" : "Rua Moema, 53 - Vila Pereta - Poá/SP",
+        "Endereço Formatado" : "Rua da residencia, 00 - Bairro escolhido - cidade/SP",
         "Endereço" : {
-            "Logradouro": "Rua Moema",
-            "Numero" : 53,
-            "Bairro" : "Vila Pereta",
-            "Cidade" : "Poá",
+            "Logradouro": "Rua da residencia",
+            "Numero" : 00,
+            "Bairro" : "Bairro escolhidoa",
+            "Cidade" : "cidade",
             "Sigla" : "SP"},
         "Conta Corrente" : {"0001": 1}
     }
@@ -146,6 +146,6 @@ contas = {
 
 Projeto desenvolvido por **Danilo Palacio** no Bootcamp **DIO & Suzano -
 Python Developer**.\
-📧 \[Seu e-mail ou LinkedIn aqui\]
+📧 \[[LinkedIn](https://www.linkedin.com/in/danilocpalacio/)]
 
 ------------------------------------------------------------------------
