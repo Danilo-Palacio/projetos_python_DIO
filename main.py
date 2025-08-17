@@ -1,17 +1,28 @@
-from datetime import datetime, time, timedelta
+from datetime import datetime, timedelta
 
 menu = """
 [d] Depositar
 [s] Sacar
 [e] Extrato
-[c] Criar Usuario
-[n] Nova Conta Corrente
-[p] Pesquisa de usuário
+
+
 [q] Sair
 
 
 => """
 
+texto_pesquisa_usuario = '''
+Você está na pagina para localizar os contratos feitos       
+Para listar todos digite - [1]
+Para buscar um usuario digite - [2]
+'''
+
+def teste_excessao_no_dia(agora):
+    amanha = (agora + timedelta(days=1)).replace(hour=0,minute=0,second=0,microsecond=0)
+    diferenca = amanha - agora
+    faltam_horas = diferenca.seconds//3600
+    faltam_minutos = (diferenca.seconds%3600) // 60
+    return faltam_horas, faltam_minutos
 
 def teste_dados_iguais(texto_dado):
     opcao = -1
@@ -183,18 +194,18 @@ def pesquisa_cpf (cpf):
     return teste_cpf
 
 def pesquisa_conta(cpf):
-    teste_conta = ""
+    contas_localizadas = []
 
     for conta in contas:
         extrair_conta = contas[conta]["CPF do Titular"]
         if str(extrair_conta) == str(cpf):
             conta_encontrada = conta
-            teste_conta += f"Conta Corrente: {contas[conta]["Agencia"]:04d}/{conta_encontrada:08d}\n"
+            contas_localizadas.append(f"{contas[conta]["Agencia"]:04d}/{conta_encontrada:08d}")
     
-    if not teste_conta:
-        teste_conta = "Não Localizado Conta Corrente vinculadas a este CPF"
+    if not contas_localizadas:
+        contas_localizadas = "Não Localizado Conta Corrente vinculadas a este CPF"
     
-    return teste_conta
+    return contas_localizadas
 
 def texto_padrao_usuario(conta):
 
@@ -212,21 +223,11 @@ dados = {
     "numero_depositos" : 0,
     "numero_transacao" : 0,
 }
-contas = {1:{
-    "Agencia": 1,
-    "CPF do Titular": 44113756805,
-    "saldo" : 0,
-    "limite" : 500,
-    "extrato" : {},
-    "numero_saques" : 0,
-    "numero_depositos" : 0,
-    "numero_transacao" : 0,}
-}
 
 usuarios = { 1:{
         "Nome":"Danilo",
         "Data de Nascimento": "29/09/1995",
-        "CPF": 44113756805,
+        "CPF": 441,
         "Endereço Formatado" : "Rua Moema, 53 - Vila Pereta - Poá/SP",
         "Endereço" : {
             "Logradouro": "Rua Moema",
@@ -237,99 +238,158 @@ usuarios = { 1:{
         "Conta Corrente" : {"0001": 1}
         }}
 
+contas = {1:{
+    "Agencia": 1,
+    "CPF do Titular": usuarios[1]["CPF"],
+    "saldo" : 0,
+    "limite" : 500,
+    "extrato" : {},
+    "numero_saques" : 0,
+    "numero_depositos" : 0,
+    "numero_transacao" : 0,}
+}
+
 LIMITE_SAQUES = 3
 LIMITE_TRANSACAO = 10
 
+tentativas_login = 0
+
+
+
 while True:
-    agora = datetime.now()
-    amanha = (agora + timedelta(days=1)).replace(hour=0,minute=0,second=0,microsecond=0)
-    diferenca = amanha - agora
-    faltam_horas = diferenca.seconds//3600
-    faltam_minutos = (diferenca.seconds%3600) // 60
-    opcao = input(menu).upper()
+    print("\nOlá Bem vindo ao sistema bancario!")
+    login_cliente = str(input("Favor, digite seu cpf para inicio: "))
+    usuario_login = pesquisa_cpf(login_cliente)
 
-    texto_excedeu_transacoes = f"""
+    conta_login = pesquisa_conta(login_cliente)
 
-\nVocê excedeu o número de transações permitidas para hoje!
-limite irá reestabelecer em {faltam_horas} horas e {faltam_minutos} minutos.
+    if usuario_login == 1:
 
-"""
+        print("\n================== Bem vindo =================="),
+        usuario_logado = usuarios[usuario_login]
+        print(f"Nome: {usuario_logado["Nome"]} \nCPF: {usuario_logado["CPF"]}\n")
+        contas_pesquisa = pesquisa_conta(login_cliente)
 
-    if opcao == "D":
-        
-        if dados["numero_transacao"] >= 10 :
-            print(texto_excedeu_transacoes)
-            continue
+        contagem = 0
+        conta_logada = 0
 
-        funcao_deposito(dados, agora)
-
-    elif opcao =="S":
-
-        if dados["numero_transacao"] >= 10 :
-                print(
-        f'\nVocê excedeu o número de transações permitidas para hoje!\nlimite irá reestabelecer em {faltam_horas} horas e {faltam_minutos} minutos.')
-                continue
-        
-        if dados["numero_saques"] >= LIMITE_SAQUES :
-             print("Operação falhou! Você alcançou o limite diario, novo saque apenas amanhã")
-
-        else: 
-            funcao_saque(dados = dados, agora = agora)
-
-    elif opcao == "E":
-        funcao_extrato(dados)
-
-    elif opcao == "Q":
-
-        print("Sistema fechado.")
-        break
+        for conta in contas_pesquisa:
+            contagem += 1
+            print(f"[{contagem}] {conta}")
     
-    elif opcao == "C":
+        menu_usuario_logado ="[n] Nova Conta Corrente\n[q] Sair"
 
-        print("Criar Usuario")
-        funcao_criar_usuario()
-        
-    elif opcao == "N":
-        print("Criar Conta Corrente")
-        cpf_para_pesquisa = input("Favor digite o CPF do titular da nova conta: ")
+        print(menu_usuario_logado)
 
-        if pesquisa_cpf(cpf_para_pesquisa) == "Não Localizado" :
+        opcao_escolhida = input("\nEscolha a opção desejada =>").upper()
 
-            print("Não existe usuário com este CPF, deseja criar um novo usuário?")
-            teste = input("Digite [C] para Criar Usuário ou [S] para Sair: ")
+        if opcao_escolhida == "Q": 
+            print("Sistema fechado.")
+            break
 
-            if teste == "c":
-                print("Criar Usuário")
-                funcao_criar_usuario()
-            
+        elif opcao_escolhida == "N":
+
+            print("Criar Conta Corrente")
+            cpf_para_pesquisa = input("Favor digite o CPF do titular da nova conta: ")
+
+            if pesquisa_cpf(cpf_para_pesquisa) == "Não Localizado" :
+
+                print("Não existe usuário com este CPF, deseja criar um novo usuário?")
+                teste = input("Digite [C] para Criar Usuário ou [S] para Sair: ")
+
+                if teste == "c":
+                    print("Criar Usuário")
+                    funcao_criar_usuario()
+                
+            else:
+                contas_pesquisa = pesquisa_conta(cpf_para_pesquisa)
+                print("\n")
+                for conta in contas_pesquisa:
+                    print(f"Conta Corrente: {conta}")
+
+                print("\nDeseja criar uma nova conta?")
+
+                criar_nova_conta = input("Digite [S] para sim e [N] para não: ").upper()
+
+                if criar_nova_conta == "S":
+                    funcao_criar_conta(cpf_para_pesquisa)
+                    continue
+                else: continue
+
+        elif opcao_escolhida.isdigit() == True:
+            if int(opcao_escolhida) <= int(contagem):
+
+                print("Teste de conta")
+                print(f"Opção escolhida: {opcao_escolhida}")
+                print(f"os dados da conta são: {contas[int(opcao_escolhida)]}")
+                conta_escolhida = contas[int(opcao_escolhida)]
+
+                agora = datetime.now()
+                opcao = input(menu).upper()
+                
+                faltam_horas,faltam_minutos = teste_excessao_no_dia(agora)
+
+                texto_excedeu_transacoes = f"\nVocê excedeu o número de transações permitidas para hoje!\nlimite irá reestabelecer em {faltam_horas} horas e {faltam_minutos} minutos."
+
+                if opcao == "D":
+
+                    if conta_escolhida["numero_transacao"] >= 10 :
+                        print(texto_excedeu_transacoes)
+                        continue
+
+                    funcao_deposito(conta_escolhida, agora)
+
+                elif opcao =="S":
+
+                    if conta_escolhida["numero_transacao"] >= 10 :
+                            print(
+                    f'\nVocê excedeu o número de transações permitidas para hoje!\nlimite irá reestabelecer em {faltam_horas} horas e {faltam_minutos} minutos.')
+                            continue
+                    
+                    if conta_escolhida["numero_saques"] >= LIMITE_SAQUES :
+                        print("Operação falhou! Você alcançou o limite diario, novo saque apenas amanhã")
+
+                    else: 
+                        funcao_saque(dados = conta_escolhida, agora = agora)
+
+                elif opcao == "E":
+                    funcao_extrato(conta_escolhida)
+
+                elif opcao == "Q":
+
+                    print("Sistema fechado.")
+                    break
+
+                else:
+                    print("Operação inválida, por favor selecione novamente a operação desejada.")
+
+
+            else:
+                print("Opção inválida")
+                continue
+
         else:
-            print(f"\n{pesquisa_conta(cpf_para_pesquisa)}")
-            print("\nDeseja criar uma nova conta?")
-
-            criar_nova_conta = input("Digite [S] para sim e [N] para não: ").upper()
-
-            if criar_nova_conta == "S":
-                funcao_criar_conta(cpf_para_pesquisa)
-            else: continue
-
-    elif opcao == "P":
-        print("Verificar os usuarios")
-        pesquisa_usuario = input('''
-Você está na pagina para localizar os contratos feitos       
-Para listar todos digite - [1]
-Para buscar um usuario digite - [2]
-''')
+            print("Opção inválida, iniciando o sistema novamente")
+            continue
         
-        if pesquisa_usuario == "1":
 
-            for usuario in usuarios:
-                print(texto_padrao_usuario(usuario)) 
+        
+        
 
-        elif pesquisa_usuario == "2":
+    elif tentativas_login <= 2:
+         tentativas_login += 1
+         print(tentativas_login)
+         print("Não existe usuário com este CPF, deseja criar um novo usuário?")
+         teste = input("Digite [C] para Criar Usuário ou [S] para Sair: ")
 
-            pesquisa_por_cpf = int(input("Digite o CPf para pesquisa: "))
-            conta = pesquisa_cpf(pesquisa_por_cpf)  
-            print(texto_padrao_usuario(conta))
+         if teste == "c":
+            print("Criar Usuário")
+            funcao_criar_usuario()
+         continue
 
-    else:
-        print("Operação inválida, por favor selecione novamente a operação desejada.")
+    elif tentativas_login == 2:
+        tentativas_login = 0
+        break
+        
+
+    
